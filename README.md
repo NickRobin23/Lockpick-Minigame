@@ -1,6 +1,6 @@
 # Lockpicking Minigame for FiveM
 
-Welcome to the **Lockpicking Minigame** resource for FiveM! Inspired by the rhythm-based gameplay of Osu!, this engaging minigame challenges players to quickly click circles that appear on the right side of the screen. It’s perfect for adding an interactive and skill-based mechanic to your server.
+Welcome to the **Lockpicking Minigame** resource for FiveM! Inspired by ProdigyRP!, this engaging minigame challenges players to quickly click circles that appear on the right side of the screen. It’s perfect for adding an interactive and skill-based mechanic to your server.
 
 ---
 
@@ -32,7 +32,7 @@ lockpicking-minigame/
 ## ⚙️ Installation
 1. Clone this repository to your FiveM resources folder:
    ```bash
-   git clone https://github.com/yourusername/lockpicking-minigame.git
+   git clone https://github.com/NickRobin23/lockpicking-minigame.git
    ```
 2. Add the resource to your `server.cfg`:
    ```bash
@@ -79,7 +79,7 @@ This project is licensed under the [MIT License](LICENSE). Please make sure to i
 
 ## 📧 Contact
 If you have any questions or need support, feel free to reach out:
-- GitHub: [yourusername](https://github.com/NickRobin23)
+- GitHub: [NickRobin23](https://github.com/NickRobin23)
 - Discord: nickrobin
 
 
