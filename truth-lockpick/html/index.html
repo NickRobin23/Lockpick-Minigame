@@ -7,17 +7,11 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="settings">
-        <label>Circles: <span id="circle-count-display">5</span></label>
-        <label>Speed: <span id="circle-speed-display">1</span></label>
-    </div>
-
     <canvas id="gameCanvas"></canvas>
 
     <script>
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
-        const settings = document.getElementById('settings');
 
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
@@ -80,8 +74,6 @@
 
                 isGameRunning = true;
                 resetGame();
-                document.getElementById('circle-count-display').innerText = count;
-                document.getElementById('circle-speed-display').innerText = speed;
 
                 const speedInMs = 2000 - (speed * 200); // Adjust speed dynamically
                 spawnCircles(count, speedInMs);
