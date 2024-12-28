@@ -37,3 +37,11 @@ RegisterNUICallback('minigameExit', function(data, cb)
     SetNuiFocus(false, false)
     cb('ok')
 end)
+
+-- Command to test the minigame
+RegisterCommand("testlockpicking", function(source, args, rawCommand)
+    local circleCount = tonumber(args[1]) or 5 -- Default to 5 circles if no argument provided
+    local speed = tonumber(args[2]) or 5 -- Default to speed 5 if no argument provided
+
+    TriggerEvent('startLockpickingMinigame', circleCount, speed)
+end, false) -- False means any player can use this command
