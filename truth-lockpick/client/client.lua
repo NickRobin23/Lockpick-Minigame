@@ -1,110 +1,39 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lockpicking Minigame</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <div id="settings">
-        <label>Circles: <span id="circle-count-display">5</span></label>
-        <label>Speed: <span id="circle-speed-display">1</span></label>
-    </div>
+local isInMinigame = false
 
-    <canvas id="gameCanvas"></canvas>
+RegisterNetEvent('startLockpickingMinigame')
+AddEventHandler('startLockpickingMinigame', function(circleCount, speed)
+    if not isInMinigame then
+        isInMinigame = true
 
-    <script>
-        const canvas = document.getElementById('gameCanvas');
-        const ctx = canvas.getContext('2d');
-        const settings = document.getElementById('settings');
+        -- Start lockpicking animation
+        local playerPed = PlayerPedId()
+        RequestAnimDict("mini@safe_cracking")
+        while not HasAnimDictLoaded("mini@safe_cracking") do
+            Wait(0)
+        end
+        TaskPlayAnim(playerPed, "mini@safe_cracking", "dial_turn_anti_fast", 8.0, -8.0, -1, 1, 0, false, false, false)
 
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+        -- Trigger NUI for the minigame
+        SendNUIMessage({ action = 'showMinigame', count = circleCount, speed = speed })
+        SetNuiFocus(true, true)
+    end
+end)
 
-        let circles = [];
-        let score = 0;
-        let isGameRunning = false;
+RegisterNUICallback('minigameComplete', function(data, cb)
+    local playerPed = PlayerPedId()
+    ClearPedTasksImmediately(playerPed) -- Stop animation
 
-        function createCircle(x, y, index) {
-            const circle = document.createElement('div');
-            circle.className = 'circle';
-            circle.style.left = `${x}px`;
-            circle.style.top = `${y}px`;
+    isInMinigame = false
+    SetNuiFocus(false, false)
+    TriggerServerEvent('lockpicking:complete', data.success)
+    cb('ok')
+end)
 
-            const text = document.createElement('div');
-            text.className = 'circle-text';
-            text.innerText = index + 1;
+RegisterNUICallback('minigameExit', function(data, cb)
+    local playerPed = PlayerPedId()
+    ClearPedTasksImmediately(playerPed) -- Stop animation
 
-            circle.appendChild(text);
-            document.body.appendChild(circle);
-
-            circle.addEventListener('click', () => {
-                score++;
-                document.body.removeChild(circle);
-                circles = circles.filter(c => c !== circle);
-
-                if (circles.length === 0) {
-                    alert(`You won! Score: ${score}`);
-                    isGameRunning = false;
-                    resetGame();
-                }
-            });
-
-            circles.push(circle);
-        }
-
-        function spawnCircles(count, speed) {
-            for (let i = 0; i < count; i++) {
-                const x = Math.random() * (canvas.width - 100);
-                const y = Math.random() * (canvas.height - 100);
-                setTimeout(() => {
-                    if (isGameRunning) createCircle(x, y, i);
-                }, i * speed);
-            }
-        }
-
-        function resetGame() {
-            circles.forEach(circle => document.body.removeChild(circle));
-            circles = [];
-            score = 0;
-        }
-
-        window.addEventListener('message', (event) => {
-            const { action, count, speed } = event.data;
-            if (action === 'startGame') {
-                if (isGameRunning) return;
-
-                isGameRunning = true;
-                resetGame();
-                document.getElementById('circle-count-display').innerText = count;
-                document.getElementById('circle-speed-display').innerText = speed;
-
-                const speedInMs = 2000 - (speed * 200); // Adjust speed dynamically
-                spawnCircles(count, speedInMs);
-            }
-        });
-
-        window.addEventListener('resize', () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        });
-
-        // Handle TriggerEvent("startLockpickingMinigame", count, speed)
-        window.addEventListener('message', (event) => {
-            const { action, count, speed } = event.data;
-            if (action === 'startGame') {
-                isGameRunning = true;
-                resetGame();
-                const speedInMs = 2000 - (speed * 200); // Adjust speed dynamically
-                spawnCircles(count, speedInMs);
-            }
-        });
-
-        window.startLockpickingMinigame = (count, speed) => {
-            window.postMessage({ action: 'startGame', count, speed });
-        };
-
-    </script>
-</body>
-</html>
+    isInMinigame = false
+    SetNuiFocus(false, false)
+    cb('ok')
+end)
