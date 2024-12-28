@@ -1,14 +1,14 @@
 body {
     margin: 0;
     font-family: Arial, sans-serif;
-    background-color: #0f0f0f;
+    background-color: transparent;
     overflow: hidden;
 }
 
 canvas {
     display: block;
     margin: 0 auto;
-    background: radial-gradient(circle, #333 0%, #111 100%);
+    background: transparent;
     box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
 }
 
